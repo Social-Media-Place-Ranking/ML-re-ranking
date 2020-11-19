@@ -22,7 +22,7 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
        - uses: actions/checkout@v2
        - uses: akhileshns/heroku-deploy@v3.6.8
-         with:
+         with:  
             heroku_api_key: ${{secrets.HEROKU_API_KEY}}
             heroku_app_name: "ml-rerank-service"
             heroku_email: "ahmadkobeid96@gmail.com"
