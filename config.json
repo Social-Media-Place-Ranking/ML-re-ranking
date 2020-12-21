@@ -1,0 +1,5 @@
+{
+    "MONGO_URL":"mongodb://rama:rama@cluster0-shard-00-00.xlj8q.mongodb.net:27017,cluster0-shard-00-01.xlj8q.mongodb.net:27017,cluster0-shard-00-02.xlj8q.mongodb.net:27017/tweets?ssl=true&replicaSet=atlas-yi054u-shard-0&authSource=admin&retryWrites=true&w=majority",
+    "DB_NAME":"tweets",
+    "COL_NAME": "tweetsFinal"    
+}
