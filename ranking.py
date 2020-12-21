@@ -66,13 +66,35 @@ def find_tweets_near_place(coordinates, tweets_collection):
 
 
 def jaccard_similarity(list1, list2):
+    '''
+    calculate the jaccard similarity between 2 lists
+    
+    Args: 
+        list1 , list2 : lists of values to compare
+        
+    Returns: 
+        jaccard similarity score
+    '''
     s1 = set(list1)
     s2 = set(list2)
     return float(len(s1.intersection(s2)) / len(s1.union(s2)))
 
 
 def build_dataset(documents, user_location, query, collection):
+    '''
+    build the dataset for each query, which will be used for training and testing later on 
 
+    Args: 
+        documents: the documents returning from the mongodb cluster
+        user_location: [longitude, latitude]
+        query: inputted query
+        query: the query's text
+        
+    Returns: 
+        dataframe of the query's data, with columns: 'query', 'document', 'query_length', 'document_length',
+       'jaccard_entire', 'sub_jaccard', 'prefix_match', 'elasticsearch_score',
+       'distance'
+    '''               
     # define the list result of the documents data
     documents_data = []
     # go over each document and gather its info
@@ -132,7 +154,13 @@ def build_dataset(documents, user_location, query, collection):
 
 
 def feature_eng(data):
-
+    '''
+    apply feature engineering operations to the raw data
+    inputs: 
+        data: raw data
+    outputs: 
+        normalized dataframe
+    '''
     data['prefix_match'] = data['prefix_match'].map({False: 0, True: 1})
 
     skewed_columns = ["elasticsearch_score", "distance",
@@ -145,18 +173,27 @@ def feature_eng(data):
 
 
 def pred_rank(data, loaded_model):
-
+    '''
+    predict the ranking of document using the pre-defined model
+    inputs:
+        data: the prepared dataframe of documents 
+        loaded_model: pre-defined model path
+    '''
+    #transform the dataframe into DMatrix format
     data_dmatrix = xgb.DMatrix(
         data.drop(['_id', 'query', 'document', 'location.lat', 'location.lon'], 1))
 
+    #load the pre-defined model and calculate the rank predictions
     pred_rank = loaded_model.predict(data_dmatrix)
 
+    #add the rank to the dataframe
     data["rank"] = pred_rank
 
+    #sort by value
     data = data.sort_values(by="rank", ascending=False)
 
     results = data[['document', 'location.lat', 'location.lon']]
-
+    #return the needed columns
     return results
 
 
