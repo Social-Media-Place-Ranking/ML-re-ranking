@@ -33,7 +33,6 @@ def get_es_results():
         docs = json.loads(request.get_json())
         user_location = [float(request.args.get("lat")), float(request.args.get("lon"))]
         data = ranking.build_dataset(docs,user_location,query,tweets_collection )
-        
         return (jsonify(ranking.rerank(model,data, docs)))
 
 

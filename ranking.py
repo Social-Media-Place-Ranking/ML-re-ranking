@@ -162,7 +162,7 @@ def pred_rank(data, loaded_model):
     return results
 
 
-def rerank(loaded_model, data, query_docs):
+def rerank(loaded_model, data):
     # data feature Engineering
     data = feature_eng(data)
 
