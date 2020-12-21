@@ -1,2 +1,11 @@
 Flask==1.1.2
 Werkzeug==1.0.1
+numpy
+json
+os
+pickle
+pandas
+pymongo
+haversine
+random
+xgboost

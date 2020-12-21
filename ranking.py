@@ -2,17 +2,9 @@ import os
 import json
 import pandas as pd
 import pymongo
-import json
 import haversine as hs
-from sklearn.metrics.pairwise import cosine_similarity
-import random
-import sys
-import math
-from random import randrange
 import numpy as np
-from sklearn import preprocessing
 import xgboost as xgb
-import math
 
 
 def connect_mongodb(mongoDB_url, database_name, collection_name):
