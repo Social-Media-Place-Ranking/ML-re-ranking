@@ -54,9 +54,6 @@ def find_tweets_near_place(coordinates, tweets_collection):
                 "_id": None,
                 "tweets_count": {"$sum": 1},
                 "tweets_average_length": {"$avg": {"$strLenCP": "$tweet"}},
-                "replies_count": {"$sum": "replies_count"},
-                "retweets_count": {"$sum": "retweets_count"},
-                "likes_count": {"$sum": "likes_count"},
                 "popularity": {"$avg": "$popularity"},
                 "hashtags": {"$sum": {"$size": "$hashtags"}},
                 "mentions": {"$sum": {"$size": "$mentions"}}}}]
