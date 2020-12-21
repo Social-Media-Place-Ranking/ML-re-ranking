@@ -113,6 +113,8 @@ def build_dataset(documents, user_location, query, collection):
             # define the dict for the document
             doc_data = {"query": query,
                         "document": document,
+                        "location.lat": coordinates[0],
+                        "location.lon": coordinates[1],
                         "query_length": len(query),
                         "document_length": len(doc['_source']['name']),
                         "jaccard_entire": jaccard_entire,
@@ -160,27 +162,9 @@ def pred_rank(data, loaded_model):
     return results
 
 
-def extract_locations(query_docs):
-
-    doc_locs = []
-
-    for doc in query_docs:
-
-        doc_locs.append(doc['_source'])
-
-    doc_locs_df = pd.json_normalize(doc_locs).rename(
-        columns={'name': 'document'})
-
-    return doc_locs_df
-
-
 def rerank(loaded_model, data, query_docs):
     # data feature Engineering
     data = feature_eng(data)
-
-    doc_locs_df = extract_locations(query_docs)
-
-    data = pd.merge(doc_locs_df, data, on='document')
 
     results = pred_rank(data, loaded_model)
 
