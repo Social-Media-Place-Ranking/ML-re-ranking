@@ -199,7 +199,7 @@ def pred_rank(data, loaded_model):
 def rerank(loaded_model, data):
     # data feature Engineering
     data = feature_eng(data)
-
+    #send data to model
     results = pred_rank(data, loaded_model)
-
+    #return re-ranked places
     return json.loads(results.to_json(orient='records'))
