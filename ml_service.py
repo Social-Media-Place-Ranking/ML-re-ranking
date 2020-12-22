@@ -17,10 +17,10 @@ Flask App Routes
 
 @app.route("/")
 def welcome():
-    return "ML Service"
+    return config.get("WELCOMING")
 
 
-@app.route("/re-rank", methods=["POST"])
+@app.route("/re-rank", methods=["POST","GET"])
 def get_es_results():
     """Post Method to rerank the data from es
 
@@ -29,12 +29,14 @@ def get_es_results():
     """
 
     if request.method == "POST":
-        query = request.args.get("query")
-        docs = json.loads(request.get_json())
-        user_location = [float(request.args.get("lat")), float(request.args.get("lon"))]
+        payload = json.loads(request.get_json())
+        query = payload.get("query")
+        docs = payload.get("places")
+        user_location = [float(payload.get("lat")), float(payload.get("lon"))]
         data = ranking.build_dataset(docs,user_location,query,tweets_collection )
         return (jsonify(ranking.rerank(model,data)))
-
+    else:
+        return config.get("WELCOMING")
 
 """
 Flask App Entry Point (Main)
@@ -42,7 +44,6 @@ Flask App Entry Point (Main)
 if __name__ == "__main__":
     # load model at app launch
     model = pickle.load(open('model.sav', 'rb'))
-    # define the mongoDB endpoint
     with open("config.json") as json_file:
         # append the json file, to get all of them in on json variable
         config = json.load(json_file)
